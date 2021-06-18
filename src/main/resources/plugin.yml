@@ -1,0 +1,6 @@
+name: JumpPowerUp
+version: ${project.version}
+main: net.kunmc.lab.jumppowerup.JumpPowerUp
+api-version: 1.16
+authors: [ mio ]
+description: ジャンプする度にジャンプ力が上がるクラフト
