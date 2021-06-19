@@ -43,42 +43,39 @@ public final class JumpPowerUp extends JavaPlugin implements Listener {
 
     @EventHandler
     public void PlayerStatisticIncrementEvent(PlayerStatisticIncrementEvent event) {
-        if(event.getStatistic() == Statistic.JUMP){
+        if (event.getStatistic() == Statistic.JUMP) {
             Player player = event.getPlayer();
             Score jc = score.getScore(player.getName());
-            int count=jc.getScore()+1;
+            int count = jc.getScore() + 1;
             jc.setScore(count);
             //一回目は通常ジャンプ
-            if(count==1)
+            if (count == 1)
                 return;
-            int x;
-            double fx;
-            fx=-(127/1939)*(count^2)-(11430/1939)*count-10922/1939;
-            x=(int) Math.floor(fx);
+            double fx = -(127.0 / 1939) * (count ^ 2) + (11430.0 / 1939) * count - 10922.0 / 1939;
+            int x = (int) Math.floor(fx);
             //レベルは127までが正のためそれ以降はレベル127を付与
-            if(count>45)
-            {
-                player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 20* 99999,127),true);
+            if (count > 45) {
+                x = 127;
             }
 
-            player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 20* 99999,x),true);
+            player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 20 * 99999, x), true);
 
             //ファントムをスポーン(50人クラフト要素)
-            if(count%10==0){
+            if (count % 10 == 0) {
                 Location loc = player.getLocation();
                 loc.getWorld().spawnEntity(loc, EntityType.PHANTOM);
             }
-
         }
     }
 
-//リスポーン時にジャンプ数のカウントを0にする
+    //リスポーン時にジャンプ数のカウントを0にする
     @EventHandler
     public void onPlayerRespawn(PlayerRespawnEvent event) {
         Player player = event.getPlayer();
         Score jc = score.getScore(player.getName());
         jc.setScore(0);
     }
+
     //落下ダメージ無効
     @EventHandler
     public void onCancelFallDamage(EntityDamageEvent e) {
@@ -86,9 +83,9 @@ public final class JumpPowerUp extends JavaPlugin implements Listener {
             return;
         }
         Player p = (Player) e.getEntity();
-        if(e.getCause() == EntityDamageEvent.DamageCause.FALL)
-            if (p.hasPotionEffect(PotionEffectType.JUMP)){ //if the cause of damage is fall damage
-                e.setCancelled(true); //you cancel the event.
+        if (e.getCause() == EntityDamageEvent.DamageCause.FALL)
+            if (p.hasPotionEffect(PotionEffectType.JUMP)) {
+                e.setCancelled(true);
             }
-        }
+    }
 }
