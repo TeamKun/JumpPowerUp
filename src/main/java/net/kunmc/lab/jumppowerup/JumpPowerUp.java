@@ -16,6 +16,8 @@ import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Score;
 import org.bukkit.scoreboard.Scoreboard;
 
+import java.math.BigDecimal;
+
 public final class JumpPowerUp extends JavaPlugin implements Listener {
 
     private Objective score;
@@ -51,17 +53,17 @@ public final class JumpPowerUp extends JavaPlugin implements Listener {
             //一回目は通常ジャンプ
             if (count == 1)
                 return;
-            double fx = -(127.0 / 1939) * (count ^ 2) + (11430.0 / 1939) * count - 10922.0 / 1939;
-            int x = (int) Math.floor(fx);
+            double fx = ((-127.0 * (Math.pow((count - 45),2))) / 1849) + 127;
+            int x = (int) fx;
             //レベルは127までが正のためそれ以降はレベル127を付与
-            if (count > 45) {
+            if (x > 127 || count > 45) {
                 x = 127;
             }
 
             player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 20 * 99999, x), true);
 
             //ファントムをスポーン(50人クラフト要素)
-            if (count % 10 == 0) {
+            for(int i=0;i<count/10;i++) {
                 Location loc = player.getLocation();
                 loc.getWorld().spawnEntity(loc, EntityType.PHANTOM);
             }
